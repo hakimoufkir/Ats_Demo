@@ -1,0 +1,139 @@
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+files/
+docker-compose.local.yml
+CommandsAndNotes.txt
+
+# User-specific folders
+.vscode/
+.idea/
+.vs/
+
+# Build folders
+bin/
+obj/
+out/
+Debug/
+Release/
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Changelogs
+CHANGELOG.md
+
+# Publish folder
+publish/
+
+# Resharper files
+_ReSharper*
+*.DotSettings.user
+
+# DotCover files
+*.dcvr
+
+# TeamCity
+*.tc13
+
+# Rider
+.idea/
+
+# Microsoft Visual Studio generated files
+*.csproj.user
+*.dbmdl
+*.jfm
+*.pfx
+*.publishsettings
+*.snk
+
+# Auto-generated UI files
+*.Designer.cs
+*.g.*
+*.g.i.*
+*.generated.cs
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Log files
+*.log
+*.tlog
+
+# NPM Packages
+node_modules/
+
+# Yarn Integrity file
+.yarn-integrity
+
+# Environment variables
+.env
+.env.*
+
+# macOS files
+.DS_Store
+
+# Windows Files
+*.lnk
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# StyleCop
+stylecop.json
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# Packages
+*.nupkg
+*.snupkg
+
+# Ignore Visual Studio Code Workspace
+.vscode/
+
+# IIS
+*.vspscc
+.vs/
+
+# Coverage and analysis results
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+*.codecov
+
+# Analysis
+*.class
+*.cache
+
+# Other generated files
+*.dll
+*.exe
+*.ilk
+*.pdb
+*.idb
+*.obj
+*.lib
+*.ncb
+*.sbr
+*.suo
+*.tlb
+*.tlh
+*.bak
+*.log
+*.dmp

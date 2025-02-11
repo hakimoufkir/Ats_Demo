@@ -1,0 +1,12 @@
+<div class="flex flex-col min-h-screen bg-gray-100">
+  <!-- Sticky Navbar -->
+  <app-navbar class="sticky top-0 z-50"></app-navbar>
+
+  <!-- Main Content (Centered) -->
+    <p-toast position="top-right"></p-toast>
+    <p-confirmDialog></p-confirmDialog>
+    <router-outlet></router-outlet>
+
+  <!-- Sticky Footer -->
+  <app-footer class="sticky bottom-0 z-10"></app-footer>
+</div>

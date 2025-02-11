@@ -1,0 +1,68 @@
+<div class="flex items-center justify-center min-h-screen bg-gray-100 p-6">
+    <div class="w-full max-w-6xl bg-white shadow-lg rounded-lg p-4">
+  
+      <!-- Employee Table -->
+      <p-table
+        [columns]="cols"
+        [value]="virtualEmployees()"
+        [scrollable]="true"
+        scrollHeight="500px"
+        [rows]="100"
+        [virtualScroll]="true"
+        [virtualScrollItemSize]="46"
+        [lazy]="true"
+        (onLazyLoad)="loadEmployeesLazy($event)"
+        class="w-full"
+      >
+  
+        <!-- Table Header -->
+        <ng-template #header let-columns>
+          <tr class="bg-gray-200">
+            <th *ngFor="let col of columns" class="px-4 py-2 text-left">
+              {{ col.header }}
+            </th>
+            <th class="px-4 py-2 text-center">Actions</th>
+          </tr>
+        </ng-template>
+  
+        <!-- Table Body -->
+        <ng-template #body let-rowData let-columns="columns">
+          <tr class="border-b hover:bg-gray-50">
+            <td *ngFor="let col of columns" class="px-4 py-2">
+              {{ rowData[col.field] }}
+            </td>
+            <!-- Actions Column -->
+            <td class="px-4 py-2 flex justify-center space-x-2">
+              <button
+                pButton
+                class="p-button p-button-rounded p-button-info p-button-sm"
+                (click)="editEmployee(rowData)">
+                <i class="pi pi-pencil"></i>
+              </button>
+              <button
+                pButton
+                class="p-button p-button-rounded p-button-danger p-button-sm"
+                (click)="confirmDelete(rowData)">
+                <i class="pi pi-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </ng-template>
+  
+        <!-- Skeleton Loading Effect -->
+        <ng-template #loadingbody let-columns="columns">
+          <tr>
+            <td *ngFor="let col of columns" class="px-4 py-2">
+              <p-skeleton [ngStyle]="{ 'width': '80%' }"></p-skeleton>
+            </td>
+            <td class="px-4 py-2 text-center">
+              <p-skeleton [ngStyle]="{ 'width': '60px' }"></p-skeleton>
+            </td>
+          </tr>
+        </ng-template>
+  
+      </p-table>
+  
+    </div>
+  </div>
+  

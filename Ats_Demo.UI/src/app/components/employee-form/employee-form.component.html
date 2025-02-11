@@ -1,0 +1,56 @@
+
+
+<div class="flex items-center justify-center min-h-screen bg-gray-100 px-4">
+  <div class="w-full max-w-lg bg-white shadow-lg rounded-lg p-6">
+    <!-- Title -->
+    <h2 class="text-xl font-semibold text-gray-700 mb-4 text-center">
+      {{ isEditMode ? 'Edit Employee' : 'Create Employee' }}
+    </h2>
+
+    <!-- Employee Form -->
+    <form [formGroup]="employeeForm" (ngSubmit)="submitForm()">
+      <!-- Name -->
+      <div class="mb-4">
+        <label class="block text-gray-600 text-sm font-medium mb-1">Name</label>
+        <input type="text" pInputText class="p-inputtext w-full" formControlName="name" />
+        <small class="text-red-500" *ngIf="employeeForm.controls['name'].invalid && employeeForm.controls['name'].touched">
+          Name is required (min 3 characters).
+        </small>
+      </div>
+
+      <!-- Position -->
+      <div class="mb-4">
+        <label class="block text-gray-600 text-sm font-medium mb-1">Position</label>
+        <input type="text" pInputText class="p-inputtext w-full" formControlName="position" />
+      </div>
+
+      <!-- Office -->
+      <div class="mb-4">
+        <label class="block text-gray-600 text-sm font-medium mb-1">Office</label>
+        <input type="text" pInputText class="p-inputtext w-full" formControlName="office" />
+      </div>
+
+      <!-- Age -->
+      <div class="mb-4">
+        <label class="block text-gray-600 text-sm font-medium mb-1">Age</label>
+        <p-inputNumber class="w-full" formControlName="age" [min]="18" [max]="65"></p-inputNumber>
+      </div>
+
+      <!-- Salary -->
+      <div class="mb-4">
+        <label class="block text-gray-600 text-sm font-medium mb-1">Salary</label>
+        <p-inputNumber class="w-full" formControlName="salary" [min]="1000" mode="currency" currency="USD"></p-inputNumber>
+      </div>
+
+      <!-- Buttons -->
+      <div class="flex justify-between">
+        <button type="submit" pButton class="p-button p-button-primary px-4" [disabled]="employeeForm.invalid">
+          <i class="pi pi-save"></i> {{ isEditMode ? 'Update' : 'Create' }}
+        </button>
+        <button type="button" pButton class="p-button p-button-secondary px-4" routerLink="/employees">
+          <i class="pi pi-arrow-left"></i> Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
