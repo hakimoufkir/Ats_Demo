@@ -141,3 +141,11 @@ C:\Users\Abdelhakim\source\repos\Ats-Demo\Ats-Demo\obj\Debug\net8.0\Ats-Demo.pdb
 C:\Users\Abdelhakim\source\repos\Ats-Demo\Ats-Demo\obj\Debug\net8.0\Ats-Demo.genruntimeconfig.cache
 C:\Users\Abdelhakim\source\repos\Ats-Demo\Ats-Demo\obj\Debug\net8.0\ref\Ats-Demo.dll
 C:\Users\Abdelhakim\source\repos\Ats-Demo\Ats-Demo\bin\Debug\net8.0\AutoMapper.dll
+C:\Users\Abdelhakim\source\repos\Ats-Demo\Ats-Demo\obj\Debug\net8.0\Ats-Demo.sourcelink.json
+C:\Users\Abdelhakim\source\repos\Ats-Demo\Ats-Demo\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Users\Abdelhakim\source\repos\Ats-Demo\Ats-Demo\bin\Debug\net8.0\FluentValidation.dll
+C:\Users\Abdelhakim\source\repos\Ats-Demo\Ats-Demo\bin\Debug\net8.0\FluentValidation.AspNetCore.dll
+C:\Users\Abdelhakim\source\repos\Ats-Demo\Ats-Demo\bin\Debug\net8.0\FluentValidation.DependencyInjectionExtensions.dll
+C:\Users\Abdelhakim\source\repos\Ats-Demo\Ats-Demo\bin\Debug\net8.0\Microsoft.Extensions.Caching.StackExchangeRedis.dll
+C:\Users\Abdelhakim\source\repos\Ats-Demo\Ats-Demo\bin\Debug\net8.0\Pipelines.Sockets.Unofficial.dll
+C:\Users\Abdelhakim\source\repos\Ats-Demo\Ats-Demo\bin\Debug\net8.0\StackExchange.Redis.dll

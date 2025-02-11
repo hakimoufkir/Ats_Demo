@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Ats_Demo.Features.Employee.Commands.Update
 {
-    public class UpdateEmployeeCommandHandler : IRequestHandler<UpdateEmployeeCommand, Ats_Demo.Dtos.EmployeeDto>
+    public class UpdateEmployeeCommandHandler : IRequestHandler<UpdateEmployeeCommand, EmployeeDetailsDto>
     {
         private readonly IEmployeeService _employeeService;
 
@@ -14,14 +14,9 @@ namespace Ats_Demo.Features.Employee.Commands.Update
             _employeeService = employeeService;
         }
 
-        public async Task<EmployeeDto> Handle(UpdateEmployeeCommand request, CancellationToken cancellationToken)
+        public async Task<EmployeeDetailsDto> Handle(UpdateEmployeeCommand request, CancellationToken cancellationToken)
         {
-            if (request is null)
-            {
-                throw new EmployeeUpdateException();
-            }
-            EmployeeDto updatedEmployeeDto = await _employeeService.UpdateEmployee(request.Id, request.UpdatedEmployeeDto);
-            return updatedEmployeeDto;
+            return await _employeeService.UpdateEmployee(request.Id, request.UpdateEmployeeDto);
         }
     }
 }

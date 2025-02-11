@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ats_Demo.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/employees")]
     [ApiController]
     public class EmployeeController : ControllerBase
     {
@@ -19,83 +19,50 @@ namespace Ats_Demo.Controllers
             _mediator = mediator;
         }
 
+
         [HttpGet]
-        public async Task<IActionResult> GetEmployees()
+        public async Task<IActionResult> GetAllEmployees()
         {
-            try
-            {
-                var result = await _mediator.Send(new GetAllEmployeesQuery());
-                return Ok(result);
-            }
-            catch(Exception ex)
-            {
-                return BadRequest($"Error: {ex.Message}");
-            }
+            var employees = await _mediator.Send(new GetAllEmployeesQuery());
+            return Ok(employees);
         }
 
-        [HttpGet("Get/{id}")]
+
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetEmployeeById(Guid id)
         {
-            try
-            {
-                var result = await _mediator.Send(new GetEmployeeByIdQuery { Id = id});
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest($"Error: {ex.Message}");
-            }
+            var employee = await _mediator.Send(new GetEmployeeByIdQuery { Id = id });
+            return Ok(employee);
         }
 
-        [HttpPost("Add")]
+        [HttpPost]
         public async Task<IActionResult> AddEmployee([FromBody] AddEmployeeCommand command)
         {
-            if (command == null)
-            {
-                return BadRequest("Invalid request");
-            }
-            try
-            {
-                var result = await _mediator.Send(command);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest($"Error: {ex.Message}");
-            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var createdEmployee = await _mediator.Send(command);
+            return CreatedAtAction(nameof(GetEmployeeById), new { id = createdEmployee.Id }, createdEmployee);
         }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateEmployee(Guid id, [FromBody] UpdateEmployeeCommand command)
         {
-            if (command == null)
-            {
-                return BadRequest("Invalid request");
-            }
-            try
-            {
-                command.Id = id;
-                var result = await _mediator.Send(command);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest($"Error: {ex.Message}");
-            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            command.Id = id;
+            var updatedEmployee = await _mediator.Send(command);
+            return Ok(updatedEmployee);
         }
 
-        [HttpDelete("Delete/{id}")]
+
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEmployee(Guid id)
         {
-            try
-            {
-                string result = await _mediator.Send(new DeleteEmployeeCommand { Id = id });
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest($"Error: {ex.Message}");
-            }
+            var result = await _mediator.Send(new DeleteEmployeeCommand { Id = id });
+            return Ok(new { Message = result });
         }
     }
 }
