@@ -32,18 +32,18 @@ namespace Ats_Demo.GenericRepo
             return await query.FirstOrDefaultAsync();
         }
 
-        public async Task CreateAsync(T entity)
+        public virtual async Task CreateAsync(T entity)
         {
             await DbSet.AddAsync(entity);
             await SaveAsync();
         }
-        public async Task UpdateAsync(T entity)
+        public virtual async Task UpdateAsync(T entity)
         {
             _db.Set<T>().Update(entity);
             await _db.SaveChangesAsync();
         }
 
-        public async Task RemoveAsync(T entity)
+        public virtual async Task RemoveAsync(T entity)
         {
             DbSet.Remove(entity);
             await SaveAsync();

@@ -3,9 +3,9 @@ using MediatR;
 
 namespace Ats_Demo.Features.Employee.Commands.Update
 {
-    public class UpdateEmployeeCommand : IRequest<EmployeeDto>
+    public class UpdateEmployeeCommand : IRequest<EmployeeDetailsDto>
     {
         public Guid Id { get; set; }
-        public EmployeeDto UpdatedEmployeeDto { get; set; }
+        public UpdateEmployeeDto UpdateEmployeeDto { get; set; }
     }
 }

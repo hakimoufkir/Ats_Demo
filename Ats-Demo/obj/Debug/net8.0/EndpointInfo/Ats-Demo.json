@@ -5,7 +5,7 @@
     "version": "1.0"
   },
   "paths": {
-    "/api/Employee/GetAll": {
+    "/api/employees": {
       "get": {
         "tags": [
           "Employee"
@@ -15,32 +15,7 @@
             "description": "OK"
           }
         }
-      }
-    },
-    "/api/Employee/GetById/{id}": {
-      "get": {
-        "tags": [
-          "Employee"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Employee/Add": {
+      },
       "post": {
         "tags": [
           "Employee"
@@ -71,7 +46,28 @@
         }
       }
     },
-    "/api/Employee/Update/{id}": {
+    "/api/employees/{id}": {
+      "get": {
+        "tags": [
+          "Employee"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
       "put": {
         "tags": [
           "Employee"
@@ -111,9 +107,7 @@
             "description": "OK"
           }
         }
-      }
-    },
-    "/api/Employee/Delete/{id}": {
+      },
       "delete": {
         "tags": [
           "Employee"
@@ -143,12 +137,51 @@
         "type": "object",
         "properties": {
           "employeeDto": {
-            "$ref": "#/components/schemas/EmployeeDto"
+            "$ref": "#/components/schemas/CreateEmployeeDto"
           }
         },
         "additionalProperties": false
       },
-      "EmployeeDto": {
+      "CreateEmployeeDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "position": {
+            "type": "string",
+            "nullable": true
+          },
+          "office": {
+            "type": "string",
+            "nullable": true
+          },
+          "age": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "salary": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateEmployeeCommand": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "updateEmployeeDto": {
+            "$ref": "#/components/schemas/UpdateEmployeeDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateEmployeeDto": {
         "type": "object",
         "properties": {
           "name": {
@@ -172,19 +205,6 @@
             "type": "number",
             "format": "double",
             "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "UpdateEmployeeCommand": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "updatedEmployeeDto": {
-            "$ref": "#/components/schemas/EmployeeDto"
           }
         },
         "additionalProperties": false

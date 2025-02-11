@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Ats-Demo")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+62c9e6fa5d04f67c73811904c829ac03f00fabfb")]
 [assembly: System.Reflection.AssemblyProductAttribute("Ats-Demo")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Ats-Demo")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

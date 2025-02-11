@@ -1,9 +1,11 @@
-﻿using MediatR;
+﻿using Ats_Demo.Dtos;
+using MediatR;
 
 namespace Ats_Demo.Features.Employee.Commands.Add
 {
-    public class AddEmployeeCommand : IRequest<Ats_Demo.Dtos.EmployeeDto>
+    public class AddEmployeeCommand : IRequest<EmployeeDetailsDto>
     {
-        public Ats_Demo.Dtos.EmployeeDto? employeeDto { get; set; }
+        public CreateEmployeeDto? EmployeeDto { get; set; }
+
     }
 }

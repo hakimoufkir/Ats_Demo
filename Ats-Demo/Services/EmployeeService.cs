@@ -3,79 +3,81 @@ using Ats_Demo.Entities;
 using Ats_Demo.Exceptions;
 using Ats_Demo.Repositories.EmployeeRepo;
 using AutoMapper;
-using MediatR;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Ats_Demo.Services
 {
     public class EmployeeService : IEmployeeService
     {
-        private readonly IEmployeeRepository _employeeRepository;
-
+        private readonly IEmployeeWriteRepository _employeeRepository;
         private readonly IMapper _mapper;
+        private readonly RedisCacheService _cacheService;
 
-        public EmployeeService(IEmployeeRepository employeeRepository, IMapper mapper)
+        public EmployeeService(IEmployeeWriteRepository employeeRepository, IMapper mapper, RedisCacheService cacheService)
         {
             _employeeRepository = employeeRepository;
             _mapper = mapper;
+            _cacheService = cacheService;
         }
 
-        public async Task<Ats_Demo.Dtos.EmployeeDto> AddEmployee(Employee employee)
+        public async Task<IEnumerable<EmployeeDetailsDto>> GetAllEmployees()
         {
-            if (employee == null)
-            {
-                throw new ArgumentNullException(nameof(employee));
-            }
+            var employees = await _employeeRepository.GetAllAsync();
+            if (employees == null || employees.Count == 0)
+                throw new KeyNotFoundException("No employees found.");
 
-            try
-            {
-                employee.CreatedDate = DateTime.UtcNow;
-                employee.Id = Guid.NewGuid();
-                await _employeeRepository.CreateAsync(employee);
-
-                return _mapper.Map<Ats_Demo.Dtos.EmployeeDto>(employee);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error adding employee: " + ex.Message);
-            }
+            return _mapper.Map<IEnumerable<EmployeeDetailsDto>>(employees);
         }
 
-        public async Task<string> DeleteEmployeeById(Guid id)
+        public async Task<EmployeeDetailsDto> GetEmployeeById(Guid id)
         {
-            try
-            {
-                Employee? employee = await _employeeRepository.GetAsync((u) => u.Id == id) ?? throw new EmployeeNotFoundException(id);
-                await _employeeRepository.RemoveAsync(employee);
-                return "Employee deleted successfully.";
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error deleting employee: " + ex.Message);
-            }
+            var employee = await _employeeRepository.GetAsync(e => e.Id == id)
+                ?? throw new EmployeeNotFoundException(id);
+
+            return _mapper.Map<EmployeeDetailsDto>(employee);
         }
 
-        public async Task<IEnumerable<Ats_Demo.Entities.Employee>> GetAllEmployees()
+        public async Task<EmployeeDetailsDto> AddEmployee(CreateEmployeeDto employeeDto)
         {
-            List<Ats_Demo.Entities.Employee>? employees = await _employeeRepository.GetAllAsync();
-            return employees ?? new List<Ats_Demo.Entities.Employee>();
+            if (employeeDto == null)
+                throw new ArgumentNullException(nameof(employeeDto), "Employee data cannot be null.");
+
+            var employee = _mapper.Map<Employee>(employeeDto);
+            employee.CreatedDate = DateTime.UtcNow;
+
+            // Generate new ID only if not provided
+            employee.Id = employee.Id == Guid.Empty ? Guid.NewGuid() : employee.Id;
+
+            await _employeeRepository.CreateAsync(employee);
+
+            // Clear cache
+            await _cacheService.RemoveCacheDataAsync("AllEmployees");
+
+            return _mapper.Map<EmployeeDetailsDto>(employee);
         }
 
-        public async Task<Employee?> GetEmployeeById(Guid id)
+        public async Task<EmployeeDetailsDto> UpdateEmployee(Guid id, UpdateEmployeeDto updatedEmployeeDto)
         {
-            Ats_Demo.Entities.Employee? employee = await _employeeRepository.GetAsync((u) => u.Id == id);
-            return employee;
-        }
+            if (updatedEmployeeDto == null)
+                throw new EmployeeUpdateException("Update request cannot be null.");
 
-        public async Task<EmployeeDto> UpdateEmployee(Guid id, EmployeeDto updatedEmployeeDto)
-        {
-            var existingEmployee = await _employeeRepository.GetAsync((u)=>u.Id == id);
-
+            var existingEmployee = await _employeeRepository.GetAsync(e => e.Id == id);
             if (existingEmployee == null)
+                throw new EmployeeNotFoundException(id);
+
+            // Ensure that at least one field is being updated
+            if (string.IsNullOrEmpty(updatedEmployeeDto.Name) &&
+                string.IsNullOrEmpty(updatedEmployeeDto.Position) &&
+                string.IsNullOrEmpty(updatedEmployeeDto.Office) &&
+                !updatedEmployeeDto.Age.HasValue &&
+                !updatedEmployeeDto.Salary.HasValue)
             {
-                throw new KeyNotFoundException("Employee not found.");
+                throw new EmployeeUpdateException("No valid fields provided for update.");
             }
 
-            // Update only the modified attributes
+            // Update only modified attributes
             existingEmployee.Name = updatedEmployeeDto.Name ?? existingEmployee.Name;
             existingEmployee.Position = updatedEmployeeDto.Position ?? existingEmployee.Position;
             existingEmployee.Office = updatedEmployeeDto.Office ?? existingEmployee.Office;
@@ -85,14 +87,26 @@ namespace Ats_Demo.Services
 
             await _employeeRepository.UpdateAsync(existingEmployee);
 
-            return new EmployeeDto
-            {
-                Name = existingEmployee.Name,
-                Position = existingEmployee.Position,
-                Office = existingEmployee.Office,
-                Age = existingEmployee.Age,
-                Salary = existingEmployee.Salary
-            };
+
+            // Clear cache
+            await _cacheService.RemoveCacheDataAsync("AllEmployees");
+            await _cacheService.RemoveCacheDataAsync($"Employee_{id}");
+
+            return _mapper.Map<EmployeeDetailsDto>(existingEmployee);
+        }
+
+        public async Task<string> DeleteEmployeeById(Guid id)
+        {
+            var employee = await _employeeRepository.GetAsync(e => e.Id == id)
+                ?? throw new EmployeeNotFoundException(id);
+
+            await _employeeRepository.RemoveAsync(employee);
+
+            // Clear cache
+            await _cacheService.RemoveCacheDataAsync("AllEmployees");
+            await _cacheService.RemoveCacheDataAsync($"Employee_{id}");
+
+            return $"Employee with ID {id} deleted successfully.";
         }
     }
 }
