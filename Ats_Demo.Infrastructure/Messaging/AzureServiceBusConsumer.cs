@@ -67,8 +67,13 @@ namespace Ats_Demo.Infrastructure.Messaging
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error processing message: {ex.Message}");
-                await args.AbandonMessageAsync(args.Message); //  Prevents infinite retry loop
+                Console.WriteLine($"MessageId: {args.Message.MessageId}, DeliveryCount: {args.Message.DeliveryCount}");
+
+                // Log the failure reason before abandoning suggested by Abdelaziz EL BAZ
+                Console.WriteLine($"FailureReason: {ex.GetType().Name} - {ex.Message}");
+
+                // Abandon the message to allow retry, but log enough details for debugging
+                await args.AbandonMessageAsync(args.Message);
             }
         }
 
