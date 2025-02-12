@@ -31,7 +31,7 @@ export class EmployeeFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.initializeForm();
-
+    console.log("Sefyan mara min houna")
     this.route.paramMap.subscribe(params => {
       this.employeeId = params.get('id')!;
       if (this.employeeId) {
